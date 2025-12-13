@@ -2,5 +2,5 @@
 	path = SOS-Verify-Manifold-Spacecraft
 	url = https://github.com/iFR-ACSO/SOS-Verify-Manifold-Spacecraft.git
 [submodule "PublicationCode/SOS-Verify-Manifold-Spacecraft"]
-	path = PublicationCode/SOS-Verify-Manifold-Spacecraft
+	path = Publications/SOS-Verify-Manifold-Spacecraft
 	url = https://github.com/iFR-ACSO/SOS-Verify-Manifold-Spacecraft.git
