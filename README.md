@@ -3,18 +3,25 @@
 This repository contains tutorials, examples and implementations from paper or textbooks. The purpose is to provide an easy on-boarding with the CaΣoS  toolbox, a nonlinear optimization-oriented sum-of-squares toolbox based on the symbolic framework of CasADi.
 
 ### Installation
-- For the pre-computation step we make use of
-  CaΣoS [1] v1.0.0-rc. The used version can be found
-  in the repository. After cloning this repository, get the submodule
-  CaΣoS with
+- Get the latest CaΣoS version
   ```
-  git clone https://github.com/iFR-ACSO/TAC25-Inf-MPC.git TAC-Inf-MPC
-  cd TAC-Inf-MPC
-  git submodule update --init --recursive
+  git clone https://github.com/iFR-ACSO/casos.git
   ```
+- Add the CaΣoS main folder to your MATLAB path
+- CaΣoS is now ready to be used
 
 
-### Quick links
+### Folder Structure
+
+```text
+Getting Started/
+├── CBF_CLF_QP         # CBF-CLF synthesis and simulation
+
+```
+
+
+
+### CaΣoS Quick links
 
 - [Getting started](https://github.com/ifr-acso/casos/wiki#getting-started)
 - Available [conic solvers](https://github.com/ifr-acso/casos/wiki#conic-solvers)
@@ -49,27 +56,3 @@ If you use CaΣoS, please cite us:
 </details>
 
 ----
-
-![casos](https://github.com/iFR-ACSO/casos/assets/14878869/ec1bd5f4-0fe5-41d4-abe6-518f1afb74ff)
-
-### Folder Structure
-
-```text
-Getting Started/
-├── CBF_CLF_QP         # CBF-CLF synthesis and simulation
-
-```
-
-### Citation
-Please cite the paper as 
-```
-@misc{olucak2025safebydesignapproximatenonlinearmodel,
-      title={Safe-by-Design: Approximate Nonlinear Model Predictive Control with Real Time Feasibility}, 
-      author={Jan Olucak and Arthur Castello B. de Oliveira and Torbjørn Cunis},
-      year={2025},
-      eprint={2509.22422},
-      archivePrefix={arXiv},
-      primaryClass={math.OC},
-      url={https://arxiv.org/abs/2509.22422}, 
-}
-```
