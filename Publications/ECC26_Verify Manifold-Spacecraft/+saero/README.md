@@ -1,0 +1,1 @@
+This folder holds the code to obtain the aerodynamic satellite model and the polynomial fits.

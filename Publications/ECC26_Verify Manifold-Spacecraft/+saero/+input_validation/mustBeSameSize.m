@@ -1,0 +1,6 @@
+function mustBeSameSize(A, B)
+    % Check if the sizes of A and B are the same
+    assert(all(size(A) == size(B)), ...
+        'Sizes of inputs ([%s]) and ([%s]) do not match.', ...
+        num2str(size(A)), num2str(size(B)));
+end

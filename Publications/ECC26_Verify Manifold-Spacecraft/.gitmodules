@@ -1,0 +1,9 @@
+[submodule "external_dependencies/matlab-tools"]
+	path = external_dependencies/matlab-tools
+	url = https://github.com/Fabian-Geyer/matlab-tools.git
+[submodule "external_dependencies/symbolic-space-math-utils"]
+	path = external_dependencies/symbolic-space-math-utils
+	url = https://github.com/Fabian-Geyer/symbolic-space-math-utils.git
+[submodule "external_dependencies/casos"]
+	path = external_dependencies/casos
+	url = https://github.com/iFR-ACSO/casos.git
