@@ -1,8 +1,13 @@
 
 # CaΣoS-Example package
-![Banner](https://github.com/user-attachments/assets/4dbc28d3-d373-4ddf-9f26-8f10e72e6e8b#gh-light-mode-only)
-![Banner](https://github.com/user-attachments/assets/0ee26ae5-68d5-48a7-b215-9cd8818e0114#gh-dark-mode-only)
 
+<img
+  src="https://github.com/user-attachments/assets/4dbc28d3-d373-4ddf-9f26-8f10e72e6e8b#gh-dark-mode-only"
+  width="50%" />
+
+<img
+  src="https://github.com/user-attachments/assets/0ee26ae5-68d5-48a7-b215-9cd8818e0114#gh-light-mode-only"
+  width="50%" />
 
 This repository contains tutorials, examples and implementations from paper or textbooks. The purpose is to provide an easy on-boarding with the CaΣoS  toolbox, a nonlinear optimization-oriented sum-of-squares toolbox based on the symbolic framework of CasADi.
 
