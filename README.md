@@ -1,3 +1,5 @@
+![iScreen Shoter - Vorschau - 251214201243](https://github.com/user-attachments/assets/8cdda46d-85b1-4ca5-b776-e84453ab6f96)
+
 # CaΣoS-Example package
 
 This repository contains tutorials, examples and implementations from paper or textbooks. The purpose is to provide an easy on-boarding with the CaΣoS  toolbox, a nonlinear optimization-oriented sum-of-squares toolbox based on the symbolic framework of CasADi.
