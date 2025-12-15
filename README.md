@@ -1,33 +1,28 @@
-
-
-<img
-  src="https://github.com/iFR-ACSO/.github/blob/main/assets/logo-example-trans.png#gh-light-mode-only"
-  width="1000%" />
-
-<img
-  src="https://github.com/iFR-ACSO/.github/blob/main/assets/logo-example-inverted.png#gh-dark-mode-only" width="100%" />
-
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/iFR-ACSO/.github/blob/main/assets/logo-example-inverted.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/iFR-ACSO/.github/blob/main/assets/logo-example-trans.png">
+  <img alt="CaΣoS example package">
+</picture>
 
 ----
 
+The **CaΣoS example package** contains tutorials, application examples, and implementations from the literature. The purpose is to provide an easy on-boarding with [CaΣoS](https://github.com/ifr-acso/casos), a nonlinear sum-of-squares optimization suite based on the symbolic framework of CasADi. New examples are continuously added.
 
-This repository contains tutorials, examples and implementations from paper or textbooks. The purpose is to provide an easy on-boarding with the CaΣoS toolbox, a nonlinear optimization-oriented sum-of-squares toolbox based on the symbolic framework of CasADi. New examples are continuously added.
-
-### Installation
-The example package itself does not not need to be installed. Only CaΣoS and a supported conic solver is needed. Follow the instructions on the [Getting started](https://github.com/ifr-acso/casos/wiki#getting-started) page.
+### Requirements
+The example package itself does not not need to be installed. Only a [stable version](https://github.com/ifr-acso/casos/releases/latest) of CaΣoS and a [supported conic solver](https://github.com/ifr-acso/casos/wiki#conic-solvers) is needed. Follow the instructions on the [Getting started](https://github.com/ifr-acso/casos/wiki#getting-started) page.
 
 ### Folder Structure
 
 ```text
 Getting Started/				# Tutorials
 ├── Basics        				# Toolbox basics
-├── SOS			  				# How to setup different kinds of SOS problems
-├── Conic			  			# How to setup cone problem using sdpsol interface
+├── SOS			  				# How to setup different types of SOS problems
+└── Conic			  			# How to setup conic problems using sdpsol interface
 
-Systems and Control/ 			# Code from publications or textbooks
+Systems and Control/ 			# Examples from the systems and controls literature
 ├── NMPC						# Synthesis of terminal conditions for NMPC, infinitesimal-NMPC law synthesis
-├── Stability					# Stability analysis, e.g., region-of-attraction estiamtion
-├── Reachability				# Reachability analysis, e.g., inner-approximation of backward reachable set
+├── Stability					# Stability analysis, e.g., region-of-attraction estimation
+└── Reachability				# Reachability analysis, e.g., inner-approximation of backwards reachable set
 ```
 
 
