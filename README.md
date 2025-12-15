@@ -14,7 +14,7 @@ The example package itself does not not need to be installed. Only a [stable ver
 ### Folder Structure
 
 ```text
-Getting Started/				# Tutorials
+Tutorials/						# Folder contains different tutorials
 ├── Basics        				# Toolbox basics
 ├── SOS			  				# How to setup different types of SOS problems
 └── Conic			  			# How to setup conic problems using sdpsol interface
