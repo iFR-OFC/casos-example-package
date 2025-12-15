@@ -1,10 +1,11 @@
+
 <p align="center">
 <img
-  src="https://github.com/user-attachments/assets/4dbc28d3-d373-4ddf-9f26-8f10e72e6e8b#gh-light-mode-only"
+  src="https://github.com/user-attachments/assets/372f3428-89e8-4fa8-b5de-385d922d97da#gh-light-mode-only"
   width="50%" />
 
 <img
-  src="https://github.com/user-attachments/assets/0ee26ae5-68d5-48a7-b215-9cd8818e0114#gh-dark-mode-only"
+  src="https://github.com/user-attachments/assets/372f3428-89e8-4fa8-b5de-385d922d97da#gh-dark-mode-only"
   width="50%" />
 </p>
 
@@ -13,7 +14,7 @@
 
 # CaΣoS-Example package
 
-This repository contains tutorials, examples and implementations from paper or textbooks. The purpose is to provide an easy on-boarding with the CaΣoS  toolbox, a nonlinear optimization-oriented sum-of-squares toolbox based on the symbolic framework of CasADi.
+This repository contains tutorials, examples and implementations from paper or textbooks. The purpose is to provide an easy on-boarding with the CaΣoS toolbox, a nonlinear optimization-oriented sum-of-squares toolbox based on the symbolic framework of CasADi. New examples are continuously added.
 
 ### Installation
 The example package itself does not not need to be installed. Only CaΣoS and a supported conic solver is needed. Follow the instructions on the [Getting started](https://github.com/ifr-acso/casos/wiki#getting-started) page.
@@ -24,11 +25,11 @@ The example package itself does not not need to be installed. Only CaΣoS and a 
 Getting Started/				# Tutorials
 ├── Basics        				# Toolbox basics
 ├── SOS			  				# How to setup different kinds of SOS problems
+├── Conic			  			# How to setup cone problem using sdpsol interface
 
-Publications/ 					# Code from publications of the iFR-ACSO group
-├── Benchmark					# ACC25: Benchmarks of CaΣoS with other state-of-the art SOS toolboxes.
-├── Infinitesimal-MPC			# TAC25: Code to synthesize a pair of compatible CBF-CLF to approximate NMPC for Spacecraft Attitude Control.
-├── Verify-Manifold-Spacecraft  # ECC26: Stability Verification on Manifolds with Applications in Spacecraft Attitude Control.
+Systems and Control/ 			# Code from publications or textbooks
+├── Stability					# Stability analysis, e.g., region-of-attraction estiamtion
+├── Reachability				# Reachability analysis, e.g., inner-approximation of backward reachable set
 ```
 
 
