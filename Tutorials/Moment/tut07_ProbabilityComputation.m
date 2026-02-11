@@ -1,0 +1,155 @@
+%% -----------------------------------------------------------------------
+%
+% Short description: This tutorial demonstrates how to setup a simple
+%                    polynomial optimization problem using the moment
+%                    hierarchy in CaSOS. We compute the probability that a
+%                    random variable x satisfies a polynomial inequality 
+%                    p(x) >= 0, formulated as a measure program.
+%
+%   Problem: Measure program formulation for probability computation:
+%  
+%           minimize -<1, mu>
+%           subject to mu is a nonnegative measure on R
+%                      mu_g - mu is a nonnegative measure
+%                      supp(μ) in {x | g(x) >= 0}
+%   
+%           where: 
+%               - mu_g is the reference Gaussian measure (mean 0, variance sigma^2 = 0.2)
+%               - g(x) = -(x + 0.1)(x - 0.1) defines the set [-0.1, 0.1]
+%               - <1, mu> represents the total mass of mu
+%
+%   Interpretation: This measure program computes an upper bound on the
+%                  probability P[x in [-0.1, 0.1]] for a Gaussian random
+%                  variable x ~ N(0, 0.2). The optimal measure mu*
+%                  approximates the Gaussian measure restricted to the
+%                  interval [-0.1, 0.1], and the optimal value -<1, mu*>
+%                  (minimized) gives the negative probability. Thus,
+%                  <1, mu*> is the upper bound on the probability.
+%
+%
+%   License: see License file of repository
+%
+% -----------------------------------------------------------------------
+
+%% Step 1) Define indeterminate variable and problem data
+
+% indeterminate variable
+x = casos.Indeterminates('x');  
+
+% constraint on x
+g = -1.*(1.*x+0.1)*(1.*x-0.1);
+
+% truncation degree for moments
+deg = 20;  
+
+% get moments of the gaussian with mean = 0 and sigma^2 = 1
+sigma = sqrt(0.2);
+v = monomials(x, 0:deg);
+v = casos.PS(v.to_vector);
+moments_g = zeros(deg+1,1);
+for i = 0:deg
+   if rem(i,2) == 0
+        n = i-1;
+        moments_g(i+1) = sigma^i*prod(n:-2:1);
+   else
+        moments_g(i+1) = 0;  
+   end
+end
+mu_g = moments_g'*v;
+
+%% Step 2) Setup measure program variables
+
+% moments up to degree 'deg' as decision variables
+mu   = casos.PS.sym('mu', monomials(x,0:deg));
+
+%% Step 3) Setup the problem struct
+
+% Step 3.1: Define problem components
+
+% measure decision variables (moments)
+x_meas = mu;
+
+% constraints:
+% 1) mu_g - mu is a nonnegative measure
+% 2) support constraint: supp(mu) in {x | g(x) >= 0}
+g_lin = [];  % linear constraint
+
+g_meas = [mu_g - mu;
+          mu.support(g)];
+
+% cost function: -<mu,1>
+f_cost = -dot(mu, 1);
+
+% Step 3.2: Setup the struct
+sos = struct();
+
+% constraints: linear cone constraints
+sos.g = [g_lin; g_meas];
+
+% decision variables: measure variables
+sos.x = x_meas;
+
+if ~isempty(f_cost)
+    sos.f = f_cost;
+else
+    % no cost, do not add to problem struct
+end
+
+% Step 3.3: Provide the problem size i.e. size of cones
+
+nx_meas = length(x_meas);
+
+ng_lin = length(g_lin);
+ng_meas = length(g_meas);
+
+% decision variable cones
+opts.Kx.meas = nx_meas;   % measure decision variables
+
+% constraint cones
+opts.Kc.lin  = ng_lin;    % linear constraints
+opts.Kc.meas = ng_meas;   % nonnegative measure cone constraints
+
+% Step 3.4: Solver options
+
+% if true, error returns infeasible
+opts.error_on_fail = false;
+
+%% Step 4) Generate a CaSoS solver instance
+
+sdp_solver = 'mosek'; % 'mosek', 'scs', 'clarabel', 'sedumi'
+
+fprintf('Generating solver instance using %s...\n', sdp_solver);
+S = casos.sossol('S', ...        % name of solver
+                 sdp_solver, ... % SDP solver
+                 sos, ...        % problem structure
+                 opts);          % options for solver
+
+%% Step 5) Call the solver to solve the convex SDP
+
+% call solver and store solution in solution struct 'sol'
+sol = S('lbg', 0, 'ubg', 0);
+
+% check the solution status with the unified solution status
+if strcmp(S.stats.UNIFIED_RETURN_STATUS, 'SOLVER_RET_SUCCESS')
+    fprintf('Succesful!\n');
+else
+    fprintf('Unsuccesful!\n');
+end
+
+%% Step 6) Check the solver statistics and problem size of the conic problem
+% check for solver statistics; output differs in the solver
+switch sdp_solver
+    case 'sedumi'
+        fprintf('Sedumi needed %d iterations and it took %.5f seconds\n',[S.stats.iter,S.stats.cpusec])
+
+    case 'mosek'
+        fprintf('Mosek needed %d iterations and it took %.5f seconds\n',[S.stats.mosek_info.MSK_IINF_INTPNT_ITER,S.stats.mosek_info.MSK_DINF_INTPNT_TIME])
+end
+
+% check the problem size of the underlying conic problem
+fprintf('The A matrix has %d rows and  %d columns\n',[S.stats.conic.size_A(1),S.stats.conic.size_A(2)])
+fprintf('The SDP has  %d decision variables\n',S.stats.conic.n_decVar)
+
+%% Step 7) Extracting the polynomial solution and display minimum value
+
+fprintf('Probability upperbound value: %.12g\n', full(sol.f));
