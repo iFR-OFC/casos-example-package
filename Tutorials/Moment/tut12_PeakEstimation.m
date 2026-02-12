@@ -4,15 +4,15 @@
 %                    program for peak estimation of polynomial dynamical
 %                    systems using the moment hierarchy in CaSOS. 
 %                    We estimate the minimum value of a polynomial function
-%                    over trajectories of a dynamical system by formulating
-%                    a measure program.
+%                    over trajectories of a dynamical system under 
+%                    time-independent uncertainty by formulating a measure program.
 %
 %  Problem: Maximum value of a state function p(x) attained along trajectories:
 %
-%           P* = sup_{t*, x_0} p(x(t*| x_0)
+%           P* = sup_{t*, x_0, w} p(x(t*| x_0, w)
 %                s.t. t* \in [0,T] 
 %                     x_0 \in X_0
-%                     \dot{x} = f(t, x(t)), \forall t \in [0, T]
+%                     \dot{x} = f(t, x(t), w), w \in W, \forall t \in [0, T]
 % 
 %  Measure program formulation for peak estimation:
 %       minimize <p, mu_term>
@@ -21,8 +21,9 @@
 %                  mu_term is a nonnegative measure on terminal states (t,x(t))
 %                  Liouville equation: mu_term = mu_init + L_f*mu_occu
 %                  supp(mu_init) in {x | gx(x) >= 0}
-%                  supp(mu_occu) in {(t,x) | gt(t) >= 0}
-%                  supp(mu_term) in {(x,t) | gt(t) >= 0}
+%                  supp(mu_term) in {(t,x) | gt(t) >= 0}
+%                  supp(mu_occu) in {(x,t,w) | gt(t) >= 0}
+%                  supp(mu_occu) in {(x,t,w) | gw(w) >= 0}
 %
 %   Interpretation: The occupation measure mu_occu encodes the distribution
 %                   of visited states over time. The objective <p, mu_term>
@@ -35,51 +36,58 @@
 %           
 %   Note: The Liouville equation encodes the dynamics via adjoint 
 %         infinitesimal generator L_f* (which is named liouville)
+%         The time-independent uncertainty is dealt by lifting the
+%         dynamical system.
 %
 %
 %   License: see License file of repository
 %
 % -----------------------------------------------------------------------
 
+
 %% Step 1) Define indeterminate variable and problem data
 
 % indeterminate variables
-x   = casos.Indeterminates('x', 2, 1); 
-t   = casos.Indeterminates('t', 1, 1); 
+x  = casos.Indeterminates('x', 2, 1);  
+t  = casos.Indeterminates('t', 1, 1);  
+w  = casos.Indeterminates('w', 1, 1);  
 
-
-% dynamical system
-f = [x(2); 
-     -x(1)-x(2)+(1/3)*x(1)^3];
+% lifted dynamical system
+f  = [x(2); -x(1)-x(2)+(1+w)*x(1)^3/3; 0];         
 
 % polynomial function to minimize
-p = x(2); 
+p = x(2);                                       
 
 % terminal time
-T   = 5;    
+T = 5;
 
 % truncation degree for moments for mu_occu
-deg = 10;    
+deg = 6;   
+
+% support of the measures
+% 1) constraint on the uncertainty
+% 2) contraint on the time
+% 3) constraint on the initial set of states (support of mu_init)
+gw  = -(1.*w-0.5)*(1.*w+0.5);                    
+gt  = -1.*t*(1.*t-T);                            
+gx0 = 0.4^2-1.*x(2)^2 -(1.*x(1)-1.5)^2;          
+     
 
 % get degree for mu_init and mu_term
 degv = deg-f.maxdeg;
 degv = degv + rem(degv,2);
 
-% support of the measures
-supp_mu_init  = 0.4^2 - (1.*x(1)-1.5)^2 - x(2)^2; 
-supp_mu_term  = t*(T-1.*t); 
-supp_mu_occu  = t*(T-1.*t); 
-
 %% Step 2) Setup measure program variables
 
+% occupation measure variable
+mu_occu = casos.PS.sym('mu_occu',monomials([t;w;x],0:deg));  
+
 % initial measure variable 
-mu_init = casos.PS.sym('mu_init',monomials(x,0:degv));
+mu_init = casos.PS.sym('mu_init',monomials([w;x],0:degv));      
 
 % terminal measure variable 
-mu_term = casos.PS.sym('mu_term',monomials([t;x],0:degv));
+mu_term = casos.PS.sym('mu_term',monomials([t;w;x],0:degv));   
 
-% occupation measure variable 
-mu_occu = casos.PS.sym('mu_occu',monomials([t;x],0:deg));
 
 %% Step 3) Setup the problem struct
 
@@ -91,21 +99,23 @@ x_meas = [mu_init; mu_term; mu_occu];
 % constraints:
 % 1) Liouville equation
 % 2) <mu_init,1> = 1 (probability measure)
-% 3) support constraint: supp(mu_init) in {x | supp_mu_init(x) >= 0}
-% 4) support constraint: supp(mu_term) in {(t,x) | supp_mu_term(t) >= 0}
-% 5) support constraint: supp(mu_occu) in {(t,x) | supp_mu_occu(t) >= 0}
+% 3) support constraint: supp(mu_init) in {(x,w) | gx0(x) >= 0}
+% 4) support constraint: supp(mu_term) in {(t,x,w) | gt(t) >= 0}
+% 5) support constraint: supp(mu_occu) in {(t,x,w) | gt(t) >= 0}
+% 6) support constraint: supp(mu_occu) in {(t,x,w) | gw(w) >= 0}
 
-v = monomials([x;t], 0:(deg-f.maxdeg));
-liouville_eq = mu_term.project(v)-mu_init.project(v)-mu_occu.liouville(f,x,t);
+v = monomials([x;w;t], 0:(deg-f.maxdeg));
+liouville_eq = mu_term.project(v)-mu_init.project(v)-mu_occu.liouville(f,[x;w],t);
 
 g_lin = [liouville_eq;
-         dot(mu_init, 1)-1
-         ];
+         dot(mu_init,1)-1                           
+         ];  
 
-g_meas = [mu_init.support(supp_mu_init);    
-          mu_term.support(supp_mu_term);    
-          mu_occu.support(supp_mu_occu)
-          ];
+g_meas= [mu_init.support(gx0);   
+         mu_term.support(gt);    
+         mu_occu.support(gt);    
+         mu_occu.support(gw)     
+         ];
 
 % cost function: <mu_term, p>
 f_cost = dot(mu_term, p);
