@@ -15,7 +15,7 @@
 %                           mu_term = mu_init + L_f*mu_occu
 %                      mu_init + (Lebesgue measure on region) is a measure
 %                      supp(mu_init) in {x | gx1(x) >= 0, gx2(x) >= 0}
-%                      supp(mu_occu) in {x | gx1(x) >= 0, gx2(x) >= 0}
+%                      supp(mu_occu) in {(t,x) | gx1(x) >= 0, gx2(x) >= 0}
 %                      supp(mu_term) in {(x,t) | gxt(x) >= 0, gt(t) >= 0}
 %
 %   Interpretation: This measure program computes the region of attraction
