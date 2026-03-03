@@ -22,7 +22,7 @@ x = casos.Indeterminates('x');
 y = casos.Indeterminates('y',2);
 
 % polynomial dynamics 
-f1 = x^4 + 10*x + u;
+f1 = x^4 + 10*x;
 
 f2 = y(1)^2*y(2) + y(1);
 
