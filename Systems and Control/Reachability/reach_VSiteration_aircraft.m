@@ -138,8 +138,9 @@ opts.Kx = struct('lin', 2,'sos',6);
 opts.Kc = struct('sos', 5);
 
 % build first solver
+tic
 S1 = casos.qcsossol('S1','bisection',sos1,opts);
-
+buildS1_time = toc;
 
 % solver 2: V-step
 sos2 = struct('x',[V;s4;s1;s2;s6;s8], ...   % dec.var
@@ -159,17 +160,24 @@ opts.Kc = struct('sos', 6);
 opts.newton_solver = [];
 
 % build second solver
+tic
 S2 = casos.sossol('S','mosek',sos2,opts);
+buildS2_time = toc;
 
 
 
 %% V-s-iteration
-for iter = 1:10
+num_iter = 5;
+solvetimeS1 = zeros(num_iter, 1);
+solvetimeS2 = zeros(num_iter, 1);
+for iter = 1:num_iter
 
     %% gamma step
 
     % call first solver
+    tic
     sol1 = S1('p',Vval);    
+    solvetimeS1(iter) = toc;
 
     % extract solution
     if strcmp(S1.stats.UNIFIED_RETURN_STATUS,'SOLVER_RET_SUCCESS') 
@@ -186,9 +194,9 @@ for iter = 1:10
     %% V step
 
     % call second solver
+    tic
     sol2 = S2('p',[gval;Kval;s3val;s5val;s7val;Vval]); 
-
-        
+    solvetimeS2(iter) = toc;    
     
      if strcmp(S2.stats.UNIFIED_RETURN_STATUS,'SOLVER_RET_SUCCESS') 
            % extract solution
@@ -205,7 +213,7 @@ for iter = 1:10
 
 end % end for-loop
 
-% total solver time over all iterations
-buildTime        = tmpbuildTime + sum(callTime1) + sum(callTime2);
-solverTime_total = sum(solvetime_all1) + sum(solvetime_all2);
-
+% build, solve and total time 
+build_time = buildS1_time + buildS2_time;
+solve_time = sum(solvetimeS1) + sum(solvetimeS2);
+total_time = build_time + solve_time;
