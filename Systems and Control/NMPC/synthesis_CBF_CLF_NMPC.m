@@ -19,7 +19,6 @@
 %
 % ------------------------------------------------------------------------
 
-clear
 close all
 clc
 
@@ -198,14 +197,6 @@ pcontour(subs(subs(Wsol_re,x(3:end),zeros(4,1)),x,deg2rad*x),0,[-omegaMax1 omega
 hold on 
 pcontour(subs(subs(g0,x(3:end),zeros(4,1)),x,deg2rad*x),0,[-omegaMax1 omegaMax1 -omegaMax1 omegaMax1]*180/pi,'k--')
 legend('Terminal Set','Safe Set')
-
-% 3D slice for Modified rodrigues parameter for rest-to-rest
-figure(2)
-deg2rad = diag([pi/180,pi/180,pi/180 1 1 1]);
-clf
-pcontour3(subs(Wsol_re,x(1:3),zeros(3,1)),0,[-1 1 -1 1 -1 1])
-hold on 
-legend('Terminal Set')
 
 
 %% verification 
