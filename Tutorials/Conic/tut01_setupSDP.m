@@ -1,9 +1,9 @@
 %% -----------------------------------------------------------------------
 %
 % Short description: This tutorial describes how to setup a Semidefinite 
-%                    Programming (SDP) problem in CaSoS. We guide you 
+%                    Programming (SDP) problem in CaΣoS. We guide you 
 %                    through the process of defining variables, constraints,
-%                    and solving the problem using CaSoS.
+%                    and solving the problem using CaΣoS.
 %
 %  Problem: Minimize trace(C1*X1) + trace(C2*X2) subject to:
 %           - trace(A1*X1) + trace(A2*X2) = b
